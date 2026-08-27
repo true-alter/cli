@@ -1,0 +1,79 @@
+{
+  "name": "@truealter/cli",
+  "version": "0.8.42",
+  "description": "~Alter identity CLI - login once, authenticated everywhere.",
+  "keywords": [
+    "alter",
+    "identity",
+    "identity-infrastructure",
+    "cli",
+    "mcp",
+    "model-context-protocol",
+    "agent-identity",
+    "ai-agent",
+    "autonomous-agents",
+    "agent-payments",
+    "x402",
+    "usdc",
+    "ed25519",
+    "authentication"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "alter": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "SECURITY.md"
+  ],
+  "scripts": {
+    "clean": "node --input-type=module -e \"import {rmSync} from 'fs'; rmSync('dist',{recursive:true,force:true})\"",
+    "build": "tsc -p tsconfig.public.json --noEmit && npm run clean && tsc -p tsconfig.public.json && node --input-type=module -e \"import {copyFileSync,chmodSync,mkdirSync,cpSync,readdirSync} from 'fs'; copyFileSync('src/onboarding/observations.json','dist/onboarding/observations.json'); mkdirSync('dist/lib/sigstore',{recursive:true}); copyFileSync('src/lib/sigstore/trusted-root.json','dist/lib/sigstore/trusted-root.json'); cpSync('src/assets/hooks','dist/assets/hooks',{recursive:true}); for (const f of readdirSync('dist/assets/hooks')) { if (f.endsWith('.sh')) chmodSync('dist/assets/hooks/'+f, 0o755); } cpSync('src/assets/skills','dist/assets/skills',{recursive:true}); for (const f of readdirSync('dist/assets/skills')) { if (f.endsWith('.sh')) chmodSync('dist/assets/skills/'+f, 0o755); } cpSync('src/assets/statusline','dist/assets/statusline',{recursive:true}); for (const f of readdirSync('dist/assets/statusline')) { if (f.endsWith('.sh')) chmodSync('dist/assets/statusline/'+f, 0o755); } mkdirSync('dist/assets/loom',{recursive:true}); copyFileSync('src/assets/loom/folder_loom.py','dist/assets/loom/folder_loom.py'); chmodSync('dist/index.js', 0o755)\" && node scripts/strip-testing-exports.mjs && node scripts/embed-plugin.mjs",
+    "start": "node dist/index.js",
+    "onboarding:dry-run": "node dist/onboarding/dry-run.js",
+    "test": "node scripts/ensure-dist.mjs && tsc -p tsconfig.test.json && node --input-type=module -e \"import {copyFileSync,mkdirSync} from 'fs'; mkdirSync('test-out/src/onboarding', {recursive: true}); copyFileSync('src/onboarding/observations.json','test-out/src/onboarding/observations.json')\" && node scripts/run-tests.mjs test-out/tests",
+    "test:e2e": "node --input-type=module -e \"import {rmSync} from 'fs'; rmSync('test-out-e2e',{recursive:true,force:true})\" && tsc -p tsconfig.e2e.json && node scripts/run-tests.mjs test-out-e2e",
+    "test:e2e:dev": "ALTER_E2E_DEV=1 node --experimental-strip-types --test tests/e2e/*.test.ts"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "@sigstore/bundle": "^5.0.0",
+    "@sigstore/protobuf-specs": "^0.5.1",
+    "@sigstore/verify": "^4.0.0",
+    "@truealter/sdk": "^0.5.10",
+    "chalk": "^5.3.0",
+    "smol-toml": "^1.6.1",
+    "strip-ansi": "^7.2.0"
+  },
+  "devDependencies": {
+    "@sigstore/sign": "^4.1.1",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.39.4",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.59.4"
+  },
+  "overrides": {
+    "brace-expansion@^5.0.0": "^5.0.9",
+    "brace-expansion@^1.1.7": "^1.1.18",
+    "js-yaml": "^4.3.1",
+    "ip-address": "^10.3.1",
+    "@sigstore/sign": {
+      "@sigstore/core": "^3.2.1"
+    }
+  },
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://truealter.com",
+  "bugs": {
+    "email": "security@truealter.com"
+  }
+}

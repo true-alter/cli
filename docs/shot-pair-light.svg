@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="668" height="288" viewBox="0 0 668 288" role="img" aria-label="alter pair status">
+<rect x="19.1" y="18.85" width="629.8" height="248" rx="12" fill="#2f3a4a" opacity="0.022"/>
+<rect x="18.2" y="19.7" width="631.6" height="248" rx="13" fill="#2f3a4a" opacity="0.022"/>
+<rect x="17.3" y="20.55" width="633.4" height="248" rx="14" fill="#2f3a4a" opacity="0.022"/>
+<rect x="16.4" y="21.4" width="635.2" height="248" rx="15" fill="#2f3a4a" opacity="0.022"/>
+<rect x="15.5" y="22.25" width="637.0" height="248" rx="16" fill="#2f3a4a" opacity="0.022"/>
+<rect x="14.6" y="23.1" width="638.8" height="248" rx="17" fill="#2f3a4a" opacity="0.022"/>
+<rect x="13.7" y="23.95" width="640.6" height="248" rx="18" fill="#2f3a4a" opacity="0.022"/>
+<rect x="12.8" y="24.8" width="642.4" height="248" rx="19" fill="#2f3a4a" opacity="0.022"/>
+<rect x="11.9" y="25.65" width="644.2" height="248" rx="20" fill="#2f3a4a" opacity="0.022"/>
+<rect x="11.0" y="26.5" width="646.0" height="248" rx="21" fill="#2f3a4a" opacity="0.022"/>
+<rect x="10.1" y="27.35" width="647.8" height="248" rx="22" fill="#2f3a4a" opacity="0.022"/>
+<rect x="9.2" y="28.2" width="649.6" height="248" rx="23" fill="#2f3a4a" opacity="0.022"/>
+<rect x="20" y="16" width="628" height="248" rx="11" fill="#fbfcfd"/>
+<path d="M20 27a11 11 0 0 1 11-11h606a11 11 0 0 1 11 11v25H20z" fill="#eef1f5"/>
+<line x1="20" y1="52" x2="648" y2="52" stroke="#d8dee6" stroke-width="1"/>
+<circle cx="40" cy="34" r="5.5" fill="#ff5f57"/>
+<circle cx="57" cy="34" r="5.5" fill="#febc2e"/>
+<circle cx="74" cy="34" r="5.5" fill="#28c840"/>
+<text x="334.0" y="37" fill="#4f5964" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="11.5" text-anchor="middle">alter pair status</text>
+<text x="40" y="78.0" fill="#8a6a12" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="600" xml:space="preserve">$ alter pair status</text>
+<text x="40" y="98.5" fill="#1f2328" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve"></text>
+<text x="40" y="119.0" fill="#1f2328" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">Connections</text>
+<text x="40" y="139.5" fill="#1f2328" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">  github (your-account) - active</text>
+<text x="40" y="160.0" fill="#1f2328" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">    profile data:     yes</text>
+<text x="40" y="180.5" fill="#1f2328" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">    read from account: bio, depth, followers, id, profile_url,</text>
+<text x="40" y="201.0" fill="#1f2328" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">                       public_repos, username</text>
+<text x="40" y="221.5" fill="#1f2328" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">    traits from this connector: 3</text>
+<rect x="20" y="16" width="628" height="248" rx="11" fill="none" stroke="#d8dee6" stroke-width="1"/>
+</svg>

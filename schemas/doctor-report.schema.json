@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://truealter.com/schemas/doctor-report.schema.json",
+  "title": "ALTER Doctor Report",
+  "description": "Machine-readable envelope emitted by `alter doctor --output-format json`.",
+  "type": "object",
+  "required": ["version", "generated_at", "summary", "exit_code", "checks"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version. Incremented on breaking changes."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp at which the doctor run completed."
+    },
+    "summary": {
+      "type": "object",
+      "required": ["ok", "warn", "fail"],
+      "additionalProperties": false,
+      "properties": {
+        "ok":   { "type": "integer", "minimum": 0 },
+        "warn": { "type": "integer", "minimum": 0 },
+        "fail": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "exit_code": {
+      "type": "integer",
+      "enum": [0, 1, 2],
+      "description": "0=all green or warn-only; 1=at least one FAIL; 2=doctor itself failed."
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "label", "status", "heal_class"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Dotted check identifier, e.g. identity.session-present."
+          },
+          "category": {
+            "type": "string",
+            "enum": ["identity", "mcp", "runtime", "config", "pairing"]
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable check label."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OK", "WARN", "FAIL"]
+          },
+          "detail": {
+            "type": "string",
+            "description": "Optional diagnostic detail."
+          },
+          "remedy": {
+            "type": "string",
+            "description": "Optional actionable fix instruction."
+          },
+          "heal_class": {
+            "type": "string",
+            "enum": ["SAFE-AUTOHEAL", "CONFIRM-FIRST", "DIAGNOSE-ONLY"],
+            "description": "Determines what --fix may do: auto-apply, prompt, or diagnose-only."
+          },
+          "healed": {
+            "type": "boolean",
+            "description": "True when heal() was called and applied during this run."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$comment": "Pins every plugin embedded into the published CLI tarball. embed-plugin.mjs asserts the built artefact hashes against this lock on every build; release.yml checks out the pinned commit instead of default-branch HEAD. Bumping a plugin = update commit + artefact hashes here in a reviewed alter-cli PR (clean-build the pinned commit, `sha256sum main.js manifest.json styles.css`). Born from the 2026-06-05 v0.8.10 divergence: desk gates scanned a stale sibling's 23.5KB bundle while CI published a 34.2KB bundle built from unpinned plugin HEAD.",
+  "alter-obsidian-plugin": {
+    "repository": "true-alter/alter-obsidian-plugin",
+    "commit": "77111f6b07b239446bdae147af8e2d5d4ade977a",
+    "artefacts": {
+      "main.js": "604eb220fd67e5833c9cbb5c4003293a740d1b1029c09eb9214c29192ef1f409",
+      "manifest.json": "5a9d7a64fdbbc64e55a206eabea43558d5b8cc7add9e415921190bbfb809e375",
+      "styles.css": "5fc2f2ab44c49ff776f6e81519af0c24af120bf821cf94b0cfa55b4ec2c79423"
+    }
+  }
+}

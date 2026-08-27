@@ -1,0 +1,18 @@
+node_modules/
+dist/
+test-out/
+test-out-e2e/
+tests/e2e/.env.e2e
+dist-internal/
+
+# build artifacts (never commit packed CLI tarballs; vendor/*.tgz is kept)
+/truealter-cli-*.tgz
+
+# Python bytecode. Matters here beyond ordinary hygiene: the vendored
+# folder_loom.py has method-explaining docstrings deliberately stripped from
+# it, and Python compiles docstrings into .pyc as string constants even though
+# it drops comments. Committing bytecode built from an unstripped copy would
+# reintroduce exactly what the strip removed. Two fixers ran the file and only
+# one remembered to delete the cache; this stops it depending on remembering.
+__pycache__/
+*.py[cod]

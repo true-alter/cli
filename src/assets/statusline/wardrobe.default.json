@@ -1,0 +1,68 @@
+{
+  "_wardrobe": "~Alter statusline segment registry. First personal-substrate customisation surface.",
+  "_usage": "Array order = render order = overflow priority (first survives, last drops).",
+  "_visibility": "'always' renders even when idle (dim). 'signal' only renders when segment has active data.",
+  "_zones": "pane-identity (left) -> operational (center) -> signals (right, drops first)",
+  "_lines": "'segments' is line 1, the session. 'segments2' is line 2, what you own.",
+  "_line2_mode": "'alerts' shows line 2 only when a segment has data. 'full' always shows it. 'off' hides it.",
+  "line2_mode": "alerts",
+  "segments": [
+    {
+      "id": "identity",
+      "enabled": true,
+      "visibility": "always"
+    },
+    {
+      "id": "branch",
+      "enabled": true,
+      "visibility": "always"
+    },
+    {
+      "id": "descriptor",
+      "enabled": true,
+      "visibility": "signal"
+    },
+    {
+      "id": "context",
+      "enabled": true,
+      "visibility": "always"
+    },
+    {
+      "id": "burn",
+      "enabled": true,
+      "visibility": "signal"
+    },
+    {
+      "id": "model",
+      "enabled": true,
+      "visibility": "always"
+    },
+    {
+      "id": "inbox",
+      "enabled": true,
+      "visibility": "always"
+    },
+    {
+      "id": "scope",
+      "enabled": true,
+      "visibility": "always"
+    }
+  ],
+  "segments2": [
+    {
+      "id": "earn",
+      "enabled": true,
+      "visibility": "signal"
+    },
+    {
+      "id": "attune",
+      "enabled": true,
+      "visibility": "signal"
+    },
+    {
+      "id": "peers",
+      "enabled": true,
+      "visibility": "signal"
+    }
+  ]
+}

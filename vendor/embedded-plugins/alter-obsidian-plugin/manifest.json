@@ -1,0 +1,11 @@
+{
+  "id": "alter-obsidian-plugin",
+  "name": "~Alter - Pair your vault",
+  "version": "0.1.2",
+  "minAppVersion": "1.4.0",
+  "description": "Pair your vault with ~Alter. Per-stream return events surface in ~Alter/. Vault content never leaves your device.",
+  "author": "~Alter",
+  "authorUrl": "https://truealter.com",
+  "fundingUrl": "https://truealter.com",
+  "isDesktopOnly": false
+}

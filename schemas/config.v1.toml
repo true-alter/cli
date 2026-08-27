@@ -1,0 +1,36 @@
+# ~/.config/alter/config.toml — schema v1 example
+#
+# The user layer of ALTER's layered TOML configuration. Written by
+# `alter config set` and `alter config edit`;
+# safe to hand-edit.
+#
+# Layers (lowest -> highest precedence):
+#   defaults  built in         ALTER brand floor
+#   system    /etc/alter/config.toml (or $ALTER_SYSTEM_CONFIG)
+#   user      this file
+#   session   $ALTER_CONFIG_FILE (optional, process-scoped)
+#
+# The tweak, not the template: keep what is yours; delete what isn't.
+
+version = 1
+
+# Palette — the muted-gold family. Three variants, one accent range:
+#   "gold-on-charcoal"  the signature (default)
+#   "gold-on-ivory"     legible in daylight
+#   "gold-on-oxblood"   evening register
+palette = "gold-on-charcoal"
+
+# Opener — the rotating first-line greeting. Exactly one of:
+#
+#   [opener]
+#   library = "default"           # rotate through the bundled library
+#
+#   [opener]
+#   line = "the field is waiting" # authored override, rendered verbatim
+[opener]
+library = "default"
+
+# Sigil — populated by `alter sigil compose`.
+# Present here as a stub for schema forward-compatibility.
+# [sigil]
+# primitives = ["border-round", "trill-stroke", "accent-one"]

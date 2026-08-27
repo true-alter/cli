@@ -1,0 +1,61 @@
+/*
+ * ALTER. Pair your vault. Plugin styles.
+ *
+ * Palette anchors on muted gold for the pairing surface; the rest
+ * of the plugin defers to the host theme so paired vaults feel native.
+ */
+
+.alter-status-bar {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.alter-status-bar.alter-status-paired {
+  color: var(--alter-muted-gold, #b8985a);
+}
+
+.alter-status-bar.alter-status-unpaired {
+  color: var(--text-muted);
+}
+
+.alter-settings-section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.alter-settings-section h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--alter-muted-gold, #b8985a);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.alter-pairing-status {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  background: var(--background-secondary);
+  font-family: var(--font-monospace);
+  font-size: 0.85em;
+}
+
+.alter-pairing-status.is-paired {
+  background: rgba(184, 152, 90, 0.12);
+  border: 1px solid rgba(184, 152, 90, 0.4);
+}
+
+.alter-revocation-token {
+  user-select: all;
+  font-family: var(--font-monospace);
+  word-break: break-all;
+  padding: 0.4rem;
+  background: var(--background-secondary);
+  border-radius: 3px;
+  font-size: 0.8em;
+}
+
+.alter-error {
+  color: var(--text-error);
+}

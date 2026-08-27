@@ -1,0 +1,36 @@
+6cd272a957224685e8788e00ae749ad89510a93f2d09ff83c0d59dc4ec292a1c  _stop-cache.sh
+#mode  _stop-cache.sh exec
+12856344009c7f5eee6552b682257a5685df05ed0258853c32a5be279a0d4a1f  _verify.sh
+#mode  _verify.sh exec
+3248c624684ee8ab15cb7a4e128aa377a88e22d9e8831c14f6da749867fd09ca  agent-substrate-prologue.sh
+#mode  agent-substrate-prologue.sh exec
+9d9890cc356a1ffaf529d4dfbaf4e1a29206fb357e2c75d6da616664cce387dd  auto-format.sh
+#mode  auto-format.sh exec
+7d9cb434eb99d1f7a72cebe5d715c62db37ec9a85c90c4b5188c96c54b3dc4a8  cc-agent-handover-poll.sh
+#mode  cc-agent-handover-poll.sh exec
+fd579b97d5913d607d6ec79352e88d5601d544d0cfd8de135e0fa553b7cfe871  cc-agent-handover.sh
+#mode  cc-agent-handover.sh exec
+391972be649119350b2937f812847adff750141f3ac40de11a0684733cb54c72  cc-awareness.sh
+#mode  cc-awareness.sh exec
+7c16cd5ef38c39bf25a3678ded943ce3efdf6ea3e3c7255bcaa5a77facc8169e  cc-broadcast.sh
+#mode  cc-broadcast.sh exec
+c81e0e9a9b14c36652b5510b84b3baa383a53f39edbac6c8a47f465fcb8372af  cc-handover-capture.sh
+#mode  cc-handover-capture.sh exec
+bf8bbd86275516dff6743cbccc5fa71d49fc51708a01c0b059ad799362758545  cc-label-summarise.sh
+#mode  cc-label-summarise.sh exec
+eca243aba6847f71461ee8747f62fbc3ac406c0aadd0176ad4bae1d62ade5d9f  cc-lesson-capture.sh
+#mode  cc-lesson-capture.sh exec
+0c1c22cfb03dd32a2777f2d48a23355df4a0065b94e4e0cb3b4a879a18535cc4  config.sh
+#mode  config.sh exec
+eddf5800a9461cff1b2835ae16c48a81df2c716f5fbd0d7157b4f9166ab9e73f  destructive-bash-gate.sh
+#mode  destructive-bash-gate.sh exec
+f0b6ef665a9ea6223b6d7e02b06453e9a879c133c32243290b5afb0406378286  environment-intent-gate.sh
+#mode  environment-intent-gate.sh exec
+48631f165db0b6499ae099ec48ace2de3f896e050b9be53bca2a346b4f35862d  homework-preflight-gate.sh
+#mode  homework-preflight-gate.sh exec
+89623c018e565699d5467c274b7f3407e3bb97dbde8a8b6911045e599156bcce  log-prune.sh
+#mode  log-prune.sh exec
+822e1dd3651e4b5b35901040fc7814d6be1373aab027c7bb20639055e76e698f  session-lesson-reconcile.sh
+#mode  session-lesson-reconcile.sh exec
+75e90cc7e81a61ac65ab2f4bee02198f47e36ec3f403b829bf19ad87e704afe4  sot-discipline.sh
+#mode  sot-discipline.sh exec

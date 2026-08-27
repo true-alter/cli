@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="668" height="329" viewBox="0 0 668 329" role="img" aria-label="alter">
+<rect x="19.1" y="18.85" width="629.8" height="289" rx="12" fill="#0a0c12" opacity="0.033"/>
+<rect x="18.2" y="19.7" width="631.6" height="289" rx="13" fill="#0a0c12" opacity="0.033"/>
+<rect x="17.3" y="20.55" width="633.4" height="289" rx="14" fill="#0a0c12" opacity="0.033"/>
+<rect x="16.4" y="21.4" width="635.2" height="289" rx="15" fill="#0a0c12" opacity="0.033"/>
+<rect x="15.5" y="22.25" width="637.0" height="289" rx="16" fill="#0a0c12" opacity="0.033"/>
+<rect x="14.6" y="23.1" width="638.8" height="289" rx="17" fill="#0a0c12" opacity="0.033"/>
+<rect x="13.7" y="23.95" width="640.6" height="289" rx="18" fill="#0a0c12" opacity="0.033"/>
+<rect x="12.8" y="24.8" width="642.4" height="289" rx="19" fill="#0a0c12" opacity="0.033"/>
+<rect x="11.9" y="25.65" width="644.2" height="289" rx="20" fill="#0a0c12" opacity="0.033"/>
+<rect x="11.0" y="26.5" width="646.0" height="289" rx="21" fill="#0a0c12" opacity="0.033"/>
+<rect x="10.1" y="27.35" width="647.8" height="289" rx="22" fill="#0a0c12" opacity="0.033"/>
+<rect x="9.2" y="28.2" width="649.6" height="289" rx="23" fill="#0a0c12" opacity="0.033"/>
+<rect x="20" y="16" width="628" height="289" rx="11" fill="#14161f"/>
+<path d="M20 27a11 11 0 0 1 11-11h606a11 11 0 0 1 11 11v25H20z" fill="#20232f"/>
+<line x1="20" y1="52" x2="648" y2="52" stroke="#2c3040" stroke-width="1"/>
+<circle cx="40" cy="34" r="5.5" fill="#ff5f57"/>
+<circle cx="57" cy="34" r="5.5" fill="#febc2e"/>
+<circle cx="74" cy="34" r="5.5" fill="#28c840"/>
+<text x="334.0" y="37" fill="#a2a9c0" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="11.5" text-anchor="middle">alter</text>
+<text x="40" y="78.0" fill="#C9A84C" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="600" xml:space="preserve">$ alter</text>
+<text x="40" y="98.5" fill="#e8ebf2" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve"></text>
+<text x="40" y="119.0" fill="#e8ebf2" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">How you earn  (turn it on once, then it accrues)</text>
+<text x="40" y="139.5" fill="#C9A84C" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">  1. alter register             </text>
+<text x="287.68" y="139.5" fill="#a2a9c0" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" xml:space="preserve">Claim your ~handle in the terminal, no</text>
+<text x="40" y="160.0" fill="#e8ebf2" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">                                </text>
+<text x="287.68" y="160.0" fill="#a2a9c0" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" xml:space="preserve">browser. Already have one? alter login</text>
+<text x="40" y="180.5" fill="#C9A84C" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">  2. alter pair                 </text>
+<text x="287.68" y="180.5" fill="#a2a9c0" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" xml:space="preserve">Pair a source (GitHub, Obsidian) so agents</text>
+<text x="40" y="201.0" fill="#e8ebf2" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">                                </text>
+<text x="287.68" y="201.0" fill="#a2a9c0" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" xml:space="preserve">that pay to query you can read your vector</text>
+<text x="40" y="221.5" fill="#C9A84C" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">  3. alter discovery enable     </text>
+<text x="287.68" y="221.5" fill="#a2a9c0" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" xml:space="preserve">Enter the field - you start outside it; no</text>
+<text x="40" y="242.0" fill="#e8ebf2" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">                                </text>
+<text x="287.68" y="242.0" fill="#a2a9c0" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" xml:space="preserve">caller can resolve you until you do</text>
+<text x="40" y="262.5" fill="#C9A84C" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" xml:space="preserve">  4. alter earnings             </text>
+<text x="287.68" y="262.5" fill="#a2a9c0" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" xml:space="preserve">Income accrues as you are queried; watch it</text>
+<rect x="20" y="16" width="628" height="289" rx="11" fill="none" stroke="#2c3040" stroke-width="1"/>
+</svg>

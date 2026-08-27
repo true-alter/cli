@@ -1,0 +1,124 @@
+{
+  "_meta": {
+    "doctrine": [
+      "Second person, always",
+      "No emoji, no exclamation marks, no Welcome greeting, no Successfully",
+      "Short sentences then one long",
+      "~alter is a witness, not a chatbot",
+      "Trill ~ only in speaker tag; not in body copy",
+      "Australian English",
+      "Specificity over flattery - falsifiable, not generic",
+      "Never prescriptive, never celebratory, no use-case lists",
+      "No workforce framing",
+      "No hedging - if-you-chose, if-you-want-it-to",
+      "No orientation field - beat 1 is exactly two lines",
+      "One entry per archetype - singular, not rotated"
+    ],
+    "schema": {
+      "observations": "Archetype-scoped; selector picks from matching archetype's pool",
+      "combos": "Multi-signal observations; selector prefers combo-matches over archetype observations",
+      "combo_keys": "Each combo key needs a matching predicate before it is added here"
+    },
+    "note": "Student archetype retired - no entry needed."
+  },
+  "observations": [
+    {
+      "id": "polyglot-01",
+      "archetype": "polyglot",
+      "body": [
+        "You write in multiple languages.",
+        "Every job application you have ever filled out asked you to pick one title."
+      ]
+    },
+    {
+      "id": "claude-01",
+      "archetype": "claude-code-user",
+      "body": [
+        "You run MCP servers.",
+        "So does this."
+      ]
+    },
+    {
+      "id": "dotfiles-01",
+      "archetype": "dotfiles-curator",
+      "body": [
+        "Someone who maintains their own dotfiles does not need a walkthrough.",
+        "You need a name."
+      ]
+    },
+    {
+      "id": "fresh-01",
+      "archetype": "fresh-machine",
+      "body": [
+        "Empty home directory. A cursor.",
+        "That is enough."
+      ]
+    },
+    {
+      "id": "long-01",
+      "archetype": "long-timer",
+      "body": [
+        "Pre-2015 git history. Half the companies you handed a username to back then do not exist now.",
+        "This is a protocol. Protocols outlive companies."
+      ]
+    },
+    {
+      "id": "fallback-01",
+      "archetype": "fallback",
+      "body": [
+        "You showed up.",
+        "That is the first signal."
+      ]
+    }
+  ],
+  "combos": [
+    {
+      "id": "combo-01",
+      "combo": "configyear_pre_2014_modern_runtime",
+      "body": [
+        "A gitconfig from more than a decade ago and a modern systems language installed more recently.",
+        "You did not pick it up out of curiosity; something broke."
+      ]
+    },
+    {
+      "id": "combo-02",
+      "combo": "timezone_email_mismatch",
+      "body": [
+        "Your email ends in one country. Your shell clock belongs to another.",
+        "Somewhere between those two is a reason you came here."
+      ]
+    },
+    {
+      "id": "combo-03",
+      "combo": "bareRepo_helix_no_vscode",
+      "body": [
+        "A bare-repo dotfiles setup. Helix, no VS Code.",
+        "Nobody drifts into that combination; you argued your way there."
+      ]
+    },
+    {
+      "id": "combo-04",
+      "combo": "polyglot_in_node_project",
+      "body": [
+        "You have several runtimes installed. The directory you ran this from is a node project.",
+        "The gap between what you can do and what you are doing right now is where most of the signal lives."
+      ]
+    },
+    {
+      "id": "combo-05",
+      "combo": "committed_pair_worker",
+      "body": [
+        "Four MCP servers and a curated shell.",
+        "You are not trying model-assisted work out. You already work this way."
+      ]
+    },
+    {
+      "id": "combo-06",
+      "combo": "configyear_pre_2013_claude",
+      "body": [
+        "Twelve years of git history on this machine.",
+        "You now pair-work with a model. The distance between those two facts is longer than the years suggest."
+      ]
+    }
+  ]
+}
