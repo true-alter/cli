@@ -23,19 +23,29 @@ name: Publish
 # and renaming it breaks the publish.
 #
 # MAIN, NOT export/main, AND THAT IS DELIBERATE. true-alter/sdk's publish
-# workflow checks out `export/main`, a squashed snapshot branch. Do not copy
-# that here for two reasons. First, alter-cli's cli-public-export.yml chose
-# main-not-export/main on 2026-08-27 in its own comment block, committing on
-# top with no force-push so a visitor lands on what publishes. Second, that
-# ref does not exist on true-alter/sdk either: the branches endpoint returns
-# `main` only, so the SDK's own publish would fail at checkout today. Anchor:
-# lesson-a-lesson-rows-repaired-clause-outlived-the-repo-it-repaired-so-the-
-# cli-mirror-reads-as-having-a-publisher-it-has-never-had-2026-09-01.
+# workflow checks out `export/main`, a squashed snapshot branch force-pushed
+# by the monorepo at each release. Do not copy that here: alter-cli's
+# cli-public-export.yml chose main-not-export/main on 2026-08-27 in its own
+# comment block, committing on top with no force-push so a visitor lands on
+# exactly what publishes. This repo has one branch and that is the design.
 #
 # THE TRIGGER IS A DISPATCH, not a push. alter-cli's cli-public-export.yml
 # pushes the curated tree here and then dispatches this workflow, so a failed
 # export cannot reach npm. A push trigger would also fire on the export's own
 # commit, which would publish before the export had finished checking itself.
+#
+# BOTH DISPATCH KINDS ARE DECLARED, and the repository one is what the
+# export actually uses. The loom-promote App's installation carries `contents:write` and
+# `actions:none`. `gh workflow run` hits the workflow-dispatch endpoint,
+# which needs `actions:write`, and true-alter/sdk's own publish chain records
+# that exact call 403ing on every release from 2026-08-12. The repository
+# dispatch endpoint needs only `contents:write`, so it works under the grant
+# the App already has, and widening the App to `actions:write` would let it
+# start arbitrary workflows across every repo it is installed on to solve one
+# job starting one workflow. `workflow_dispatch` stays for hand runs by a
+# maintainer, whose own token does carry `actions:write`. Anchor:
+# lesson-a-lesson-rows-repaired-clause-outlived-the-repo-it-repaired-so-the-
+# cli-mirror-reads-as-having-a-publisher-it-has-never-had-2026-09-01.
 #
 # NO `npm test` STEP, AND ITS ABSENCE IS THE DESIGN. This repo's own `test`
 # script needs tsconfig.test.json and tests/, and the curated export ships
@@ -46,6 +56,8 @@ name: Publish
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [cli-export-published]
 
 permissions:
   id-token: write
