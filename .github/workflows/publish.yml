@@ -74,8 +74,24 @@ jobs:
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version: 20
+          node-version: 22
           registry-url: https://registry.npmjs.org
+
+      - name: Meet staged publishing's floor
+        # Staged publishing needs npm 11.15.0 and Node 22.14.0 or newer, and
+        # Node 22 ships npm 10.x, so the CLI is upgraded here rather than
+        # assumed. The floor is asserted rather than hoped for: a too-old npm
+        # would treat `stage` as an unknown command and fail late with a
+        # message about the argument rather than the version.
+        run: |
+          set -euo pipefail
+          npm install -g npm@latest
+          npm --version
+          node --version
+          npm stage --help >/dev/null 2>&1 || {
+            echo "::error::publish: this npm has no stage command. Needs 11.15.0 or newer."
+            exit 1
+          }
 
       - run: npm ci --no-audit --no-fund
 
@@ -159,30 +175,64 @@ jobs:
 
           echo "Publish gate PASSED: no founder markers in public dist/"
 
-      - name: Publish to npm (principal channel)
-        # CHANNEL POSTURE, locked 2026-05-09 after Drew's v0.4.7 lockout, and
-        # unchanged by this file's move. Every cut publishes to the `principal`
-        # dist-tag, which ALTER team installs pull
-        # (`npm install -g @truealter/cli@principal`) and which the self-update
-        # module's principal-handle allowlist reads. The `latest` dist-tag,
-        # which a vanilla `npm install -g @truealter/cli` resolves, is NOT
-        # touched here. Promotion to `latest` is a hand-curated act; see
-        # RELEASING.md "Channel promotion" upstream.
+      - name: Stage the cut for approval
+        # THE CUT IS STAGED, NOT PUBLISHED, and that replaces the two-channel
+        # posture rather than abandoning what it protected.
         #
-        # IDEMPOTENT. A re-dispatch on an already-published version must not
-        # hard-fail on npm's republish conflict, so the registry is read first
-        # and the run stands down to a dist-tag add. The stand-down path
-        # deliberately keeps the publish out of the branch rather than trying
-        # to set the tag some other way: the OIDC exchange that authenticates
-        # this job happens inside `npm publish`, and `npm dist-tag add` carries
-        # its own auth against the same trusted publisher.
+        # The posture locked 2026-05-09 after Drew's v0.4.7 lockout sent every
+        # cut to `principal` and moved `latest` by hand, so an unreviewed cut
+        # could not reach a vanilla `npm install -g @truealter/cli`. That
+        # needed `npm dist-tag add`, which a trusted publisher cannot do: npm
+        # allows one trusted publisher per package with one workflow filename,
+        # and its Allowed actions are `npm publish` and `npm stage publish`
+        # only, with dist-tag changes still requiring traditional
+        # authentication. So the old posture and a closed token path could not
+        # both hold. Anchor: ruling-each-npm-package-gets-its-own-granular-
+        # publish-token-never-one-automation-token-across-the-estate-2026-09-01.
+        #
+        # Staging gives the same protection with no credential at all. The cut
+        # is staged with `latest`, and it reaches the registry only when a
+        # maintainer approves it with 2FA, in the CLI or on npmjs.com. Nothing
+        # unattended can put a version in front of an installer, which is a
+        # stronger guarantee than the old posture gave, since a `principal`
+        # cut published automatically and only the promotion was curated.
+        #
+        # It authenticates the same way a publish does. `StagePublish` extends
+        # `Publish` with `static stage = true`, so it inherits the same
+        # `oidc()` call and the same `--provenance` support; the staging path
+        # is not a second, weaker route. Provenance is what this whole move is
+        # for, since npm refuses it from a private repository with HTTP 422.
+        #
+        # IDEMPOTENT ON THE PUBLISHED SIDE ONLY. A re-dispatch on a version
+        # already live stands down. A version already sitting in the stage is
+        # NOT handled here, deliberately: `npm stage list`'s output shape has
+        # not been observed from this repo, and inventing a parse for it would
+        # be a guess in the one step that must not guess. A duplicate stage
+        # fails with the registry's own message, which is legible.
         run: |
           set -euo pipefail
           tarball=$(ls truealter-cli-*.tgz)
           version=$(node -p "require('./package.json').version")
           if npm view "@truealter/cli@${version}" version >/dev/null 2>&1; then
-            echo "@truealter/cli@${version} already published, ensuring principal dist-tag, skipping re-publish."
-            npm dist-tag add "@truealter/cli@${version}" principal
-          else
-            npm publish "$tarball" --access public --provenance --tag principal
+            echo "@truealter/cli@${version} is already live on the registry, nothing to stage."
+            exit 0
           fi
+          npm stage publish "$tarball" --access public --provenance --tag latest
+          echo "publish: staged ${version} with tag latest. It is NOT live until approved with 2FA."
+
+      - name: Say what is now waiting on a human
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+          {
+            echo "### @truealter/cli ${version} is staged, not published"
+            echo
+            echo "It reaches installers only when you approve it with 2FA:"
+            echo
+            echo '```'
+            echo "npm stage list @truealter/cli"
+            echo "npm stage view <stage-id>       # inspect before approving"
+            echo "npm stage approve <stage-id>    # prompts for 2FA, publishes"
+            echo "npm stage reject <stage-id>     # discard"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
