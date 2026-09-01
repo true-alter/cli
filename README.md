@@ -9,6 +9,7 @@
 [![@truealter/cli](https://img.shields.io/npm/v/@truealter/cli?label=%40truealter%2Fcli&color=C9A84C&style=flat-square)](https://www.npmjs.com/package/@truealter/cli)
 [![Homebrew](https://img.shields.io/badge/brew-true--alter%2Ftap%2Falter-C9A84C?style=flat-square)](https://github.com/true-alter/homebrew-tap)
 [![MCP](https://img.shields.io/badge/MCP-live-C9A84C?style=flat-square)](https://mcp.truealter.com/api/v1/mcp)
+[![Smithery](https://img.shields.io/badge/smithery-~Alter-C9A84C?style=flat-square)](https://smithery.ai/servers/true-alter/alter-identity)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-555?style=flat-square)](#install)
 [![Licence](https://img.shields.io/badge/licence-Apache--2.0-555?style=flat-square)](./LICENSE)
 
