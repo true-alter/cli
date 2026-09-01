@@ -67,6 +67,14 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Job-level, so the widening is scoped to the one job that needs it and
+    # the workflow default above stays read. `contents: write` is what the
+    # release step below needs and nothing else here uses it. `id-token` is
+    # repeated because a job-level block REPLACES the workflow default rather
+    # than adding to it, and dropping it would silently break npm's OIDC.
+    permissions:
+      id-token: write
+      contents: write
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
@@ -219,6 +227,61 @@ jobs:
           fi
           npm stage publish "$tarball" --access public --provenance --tag latest
           echo "publish: staged ${version} with tag latest. It is NOT live until approved with 2FA."
+
+      - name: Cut the release this repo has never carried
+        # Measured 2026-09-01: true-alter/cli held ZERO tags and ZERO releases
+        # while the private alter-cli carried five. The npm `repository` field
+        # points here, so the page a reader reaches from the listing looked
+        # like a repo nobody had ever released. Same class as the broken
+        # masthead images, and invisible for the same reason: the surface a
+        # maintainer checks is not the surface a stranger meets.
+        #
+        # The export writes one squashed commit per cut, so the tag belongs on
+        # that commit and there is nowhere else it could go.
+        #
+        # IDEMPOTENT, matching the stage step above. A re-dispatch on a
+        # version already tagged stands down rather than failing.
+        #
+        # The release is cut even though the npm cut is only STAGED. The tag
+        # records which source was cut, which is true the moment the export
+        # lands and stays true whether or not the stage is approved, and the
+        # body says plainly that installers do not have it yet.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+          tag="v${version}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "release: ${tag} already exists, nothing to cut."
+            exit 0
+          fi
+          sha=$(git rev-parse HEAD)
+          notes=$(mktemp)
+          {
+            echo "\`@truealter/cli@${version}\` is staged on npm and reaches installers when a maintainer approves it with 2FA."
+            echo
+            echo '```'
+            echo "npm install -g @truealter/cli"
+            echo '```'
+            # This version's CHANGELOG section, keyed on the version and NOT
+            # on position. The first written form took the newest section and
+            # that is `## [Unreleased]` in this file, so every release would
+            # have carried the notes for work that is not in it. Proved
+            # against the real file before this shipped: keyed on 0.8.43 it
+            # returns that section, keyed on a version the file does not
+            # carry it returns zero bytes and the release goes out with the
+            # install line alone.
+            if [ -f CHANGELOG.md ]; then
+              body=$(awk -v v="$version" '$0 ~ "^## \\[" v "\\]" {f=1; next} f && /^## /{exit} f{print}' CHANGELOG.md)
+              if [ -n "$body" ]; then
+                echo
+                echo "$body"
+              fi
+            fi
+          } > "$notes"
+          gh release create "$tag" --title "$tag" --notes-file "$notes" --target "$sha"
+          echo "release: cut ${tag} at ${sha}."
 
       - name: Say what is now waiting on a human
         run: |
