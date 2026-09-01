@@ -1,6 +1,6 @@
 {
   "name": "@truealter/cli",
-  "version": "0.8.42",
+  "version": "0.8.43",
   "description": "~Alter identity CLI - login once, authenticated everywhere.",
   "keywords": [
     "alter",
@@ -73,7 +73,11 @@
     "access": "public"
   },
   "homepage": "https://truealter.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/true-alter/cli.git"
+  },
   "bugs": {
-    "email": "security@truealter.com"
+    "url": "https://github.com/true-alter/cli/issues"
   }
 }

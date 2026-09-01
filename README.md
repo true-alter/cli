@@ -1,15 +1,14 @@
 <div align="center">
 
-<img src="./docs/alter-mark.svg" alt="" height="96">
+<img src="https://raw.githubusercontent.com/true-alter/cli/main/docs/alter-mark.svg" alt="" height="96">
 
 # ~alter CLI
 
-**Claim a name that is yours and get paid when someone reads it.**
+**Claim a name that is yours and get paid when someone reads it**
 
 [![@truealter/cli](https://img.shields.io/npm/v/@truealter/cli?label=%40truealter%2Fcli&color=C9A84C&style=flat-square)](https://www.npmjs.com/package/@truealter/cli)
 [![Homebrew](https://img.shields.io/badge/brew-true--alter%2Ftap%2Falter-C9A84C?style=flat-square)](https://github.com/true-alter/homebrew-tap)
 [![MCP](https://img.shields.io/badge/MCP-live-C9A84C?style=flat-square)](https://mcp.truealter.com/api/v1/mcp)
-[![Smithery](https://img.shields.io/badge/smithery-~Alter-C9A84C?style=flat-square)](https://smithery.ai/servers/true-alter/alter-identity)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-555?style=flat-square)](#install)
 [![Licence](https://img.shields.io/badge/licence-Apache--2.0-555?style=flat-square)](./LICENSE)
 
@@ -189,7 +188,7 @@ The menu opens on the four commands that turn earning on.
 
 <div align="center">
 
-<img src="./docs/shot-menu-plain.svg" alt="The alter menu, showing the four earn steps" width="668" height="329">
+<img src="https://raw.githubusercontent.com/true-alter/cli/main/docs/shot-menu-plain.svg" alt="The alter menu, showing the four earn steps" width="668" height="329">
 
 </div>
 
@@ -200,7 +199,7 @@ below.
 
 <div align="center">
 
-<img src="./docs/shot-walk-plain.svg" alt="The six-step guided walk shown by alter status" width="668" height="349">
+<img src="https://raw.githubusercontent.com/true-alter/cli/main/docs/shot-walk-plain.svg" alt="The six-step guided walk shown by alter status" width="668" height="349">
 
 </div>
 
@@ -214,7 +213,7 @@ it, and stops. Nothing is sent and nothing is created.
 
 <div align="center">
 
-<img src="./docs/shot-audit-plain.svg" alt="alter audit output, showing what is read locally and that nothing was written" width="668" height="411">
+<img src="https://raw.githubusercontent.com/true-alter/cli/main/docs/shot-audit-plain.svg" alt="alter audit output, showing what is read locally and that nothing was written" width="668" height="411">
 
 </div>
 
@@ -271,7 +270,7 @@ what each returned, and `alter unpair <id>` to drop one.
 
 <div align="center">
 
-<img src="./docs/shot-pair-plain.svg" alt="alter pair status, showing a paired source and what it gave" width="668" height="288">
+<img src="https://raw.githubusercontent.com/true-alter/cli/main/docs/shot-pair-plain.svg" alt="alter pair status, showing a paired source and what it gave" width="668" height="288">
 
 </div>
 
