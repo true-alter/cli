@@ -13,10 +13,8 @@
     "removeComments": true,
     "stripInternal": true
   },
-  "include": ["src/**/*"],
-  "exclude": [
-    "src/commands/attribution-log.ts",
-    "src/commands/prose-signoff.ts",
-    "src/lib/weave-log.ts"
-  ]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": []
 }

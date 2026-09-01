@@ -6,8 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.8.43] - 2026-09-01
+
 ### Fixed
 
+- Every image in this README now resolves on npm. All five were relative paths
+  into `docs/`, and `files` ships only `dist`, `LICENSE`, `README.md` and
+  `SECURITY.md`, so `docs/` has never been inside a tarball. The npm listing
+  rendered a broken masthead and four broken terminal shots, which are the only
+  demonstration of the product on that page. They are now absolute raw URLs
+  against the public `true-alter/cli` repo, which resolve on GitHub and on npm
+  alike and change nothing about what ships.
+- The masthead subtitle drops its trailing fullstop.
 - A clean pull no longer breaks the build, and a type error can no longer take the CLI off the machine. 249 files under `node_modules/` were tracked, npm's installed-state marker among them, so a pull overwrote the puller's record of what was actually installed and npm then did nothing, including when told the exact version. The build failed naming the wrong file, because the source was correct and the dependency on disk was not. The vendoring was never a decision: the repo's first commit carried a `.gitignore` written as one literal line, `node_modules/\ndist/`, which matched nothing, and only that first install's typescript and `@types` were ever caught by it. Every workflow here installs with `npm ci`, which removes the directory outright, so nothing read those files. The build now type-checks before it cleans, so a failure leaves the previous `dist` standing rather than deleting it and leaving the linked binary pointing at nothing.
 - A test now fails if anything in the index matches a `.gitignore` rule, and if any `.gitignore` line carries a literal escape sequence. The second check is the one that would have caught this at the first commit rather than four months later, because a rule written as `node_modules/\ndist/` reads correctly to anyone who opens the file while matching nothing at all.
 
