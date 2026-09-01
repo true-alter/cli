@@ -1,0 +1,188 @@
+name: Publish
+
+# The npm publish for @truealter/cli runs HERE, in this public repo, rather
+# than in alter-cli where the source is authored.
+#
+# THE REASON IS NOT TIDINESS, IT IS THAT PROVENANCE IS OTHERWISE IMPOSSIBLE.
+# npm rejects `--provenance` from a private repository with HTTP 422, which
+# alter-cli's own release.yml records against its `id-token: write` line:
+# "NOT used for npm --provenance (that needs a public repo, rejected with
+# HTTP 422 on a private repo)". Every @truealter/cli version published to
+# date therefore carries no attestation at all, while @truealter/sdk, which
+# publishes from a public repo, carries a real one. Moving the publish here
+# is the only way the CLI ever gets one.
+#
+# Authentication is npm trusted publishing over GitHub OIDC, so this repo
+# holds no secrets and needs none. Anchor:
+# ruling-each-npm-package-gets-its-own-granular-publish-token-never-one-
+# automation-token-across-the-estate-2026-09-01, which states of this repo
+# "no secrets and no environments, and it stays that way", and that moving
+# the CLI release here "is now a workflow change with no credential step in
+# it". Trusted publishing is configured per package against ONE repository
+# and ONE workflow path, so this file's path is part of that configuration
+# and renaming it breaks the publish.
+#
+# MAIN, NOT export/main, AND THAT IS DELIBERATE. true-alter/sdk's publish
+# workflow checks out `export/main`, a squashed snapshot branch force-pushed
+# by the monorepo at each release. Do not copy that here: alter-cli's
+# cli-public-export.yml chose main-not-export/main on 2026-08-27 in its own
+# comment block, committing on top with no force-push so a visitor lands on
+# exactly what publishes. This repo has one branch and that is the design.
+#
+# THE TRIGGER IS A DISPATCH, not a push. alter-cli's cli-public-export.yml
+# pushes the curated tree here and then dispatches this workflow, so a failed
+# export cannot reach npm. A push trigger would also fire on the export's own
+# commit, which would publish before the export had finished checking itself.
+#
+# BOTH DISPATCH KINDS ARE DECLARED, and the repository one is what the
+# export actually uses. The loom-promote App's installation carries `contents:write` and
+# `actions:none`. `gh workflow run` hits the workflow-dispatch endpoint,
+# which needs `actions:write`, and true-alter/sdk's own publish chain records
+# that exact call 403ing on every release from 2026-08-12. The repository
+# dispatch endpoint needs only `contents:write`, so it works under the grant
+# the App already has, and widening the App to `actions:write` would let it
+# start arbitrary workflows across every repo it is installed on to solve one
+# job starting one workflow. `workflow_dispatch` stays for hand runs by a
+# maintainer, whose own token does carry `actions:write`. Anchor:
+# lesson-a-lesson-rows-repaired-clause-outlived-the-repo-it-repaired-so-the-
+# cli-mirror-reads-as-having-a-publisher-it-has-never-had-2026-09-01.
+#
+# NO `npm test` STEP, AND ITS ABSENCE IS THE DESIGN. This repo's own `test`
+# script needs tsconfig.test.json and tests/, and the curated export ships
+# neither, so the step could only ever fail. The suite runs upstream in
+# alter-cli against the tree this export is cut from. `npm run build` below
+# runs `tsc --noEmit` before it emits, so the exported source is type-checked
+# here as well.
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [cli-export-published]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: main
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci --no-audit --no-fund
+
+      - run: npm run build
+
+      - name: Pack
+        run: npm pack
+
+      - name: Pre-publish sanity (packed tarball carries a real dist/)
+        run: |
+          set -euo pipefail
+          tarball=$(ls truealter-cli-*.tgz)
+          tmpdir=$(mktemp -d)
+          tar -xzf "$tarball" -C "$tmpdir"
+          if [ ! -d "$tmpdir/package/dist" ]; then
+            echo "::error::publish: packed tarball has no package/dist. Refusing to publish."
+            exit 1
+          fi
+          rm -rf "$tmpdir"
+
+      - name: Founder-surface publish gate (WS1)
+        # Carried over verbatim from alter-cli's release.yml publish job. It
+        # scans the 14 founder/principal markers that must never appear in the
+        # public @truealter/cli artefact, on the exact tarball npm will upload
+        # rather than on the source tree, so it catches anything the pack step
+        # introduces. Moving the publish without moving this gate is precisely
+        # the failure lesson-public-mirror-publish-step-copied-the-sdks-shape-
+        # and-dropped-alter-clis-channel-posture-2026-08-09 already recorded
+        # once. Marker list: ws1-founder-exclusion-spec.md section 3.5.
+        run: |
+          set -euo pipefail
+          tarball=$(ls truealter-cli-*.tgz)
+          echo "Scanning $tarball for founder/principal markers..."
+
+          tmpdir=$(mktemp -d)
+          tar -xzf "$tarball" -C "$tmpdir"
+
+          FAIL=0
+
+          declare -a MARKERS=(
+            '"~blake"'
+            '"~drew"'
+            'PRINCIPAL_ALLOWLIST'
+            'PRINCIPAL_HANDLES'
+            'PRINCIPAL_CHANNEL'
+            'actAsAlterFlow'
+            'act-as-alter'
+            '/api/v1/auth/act-as'
+            '/api/v1/admin/token-usage'
+            'ALTER_PRINCIPALS'
+            'ops.truealter.com'
+            'publishRelease'
+            'ALTER_R2_ACCOUNT_ID'
+            'isPrincipalHandle'
+          )
+
+          for marker in "${MARKERS[@]}"; do
+            # dist/lib/cosmetics/snippets.js carries "~blake" as a
+            # documentation comment example only
+            # (ws1-founder-exclusion-spec.md section 2.3). -F, because an
+            # unescaped dot in a filename pattern is a wildcard and would
+            # also excuse the underscored spelling.
+            hits=$(grep -rl "$marker" "$tmpdir/package/dist/" 2>/dev/null \
+              | grep -vF 'dist/lib/cosmetics/snippets.js' || true)
+            if [ -n "$hits" ]; then
+              echo "::error::FOUNDER SURFACE FOUND: '$marker' in public dist/"
+              echo "$hits" | while read -r f; do
+                echo "  -> $f"
+              done
+              FAIL=1
+            fi
+          done
+
+          rm -rf "$tmpdir"
+
+          if [ "$FAIL" -ne 0 ]; then
+            echo "::error::Publish blocked: founder/principal markers detected in public artefact."
+            echo "::error::Move all flagged code to src-internal/ before publishing."
+            exit 1
+          fi
+
+          echo "Publish gate PASSED: no founder markers in public dist/"
+
+      - name: Publish to npm (principal channel)
+        # CHANNEL POSTURE, locked 2026-05-09 after Drew's v0.4.7 lockout, and
+        # unchanged by this file's move. Every cut publishes to the `principal`
+        # dist-tag, which ALTER team installs pull
+        # (`npm install -g @truealter/cli@principal`) and which the self-update
+        # module's principal-handle allowlist reads. The `latest` dist-tag,
+        # which a vanilla `npm install -g @truealter/cli` resolves, is NOT
+        # touched here. Promotion to `latest` is a hand-curated act; see
+        # RELEASING.md "Channel promotion" upstream.
+        #
+        # IDEMPOTENT. A re-dispatch on an already-published version must not
+        # hard-fail on npm's republish conflict, so the registry is read first
+        # and the run stands down to a dist-tag add. The stand-down path
+        # deliberately keeps the publish out of the branch rather than trying
+        # to set the tag some other way: the OIDC exchange that authenticates
+        # this job happens inside `npm publish`, and `npm dist-tag add` carries
+        # its own auth against the same trusted publisher.
+        run: |
+          set -euo pipefail
+          tarball=$(ls truealter-cli-*.tgz)
+          version=$(node -p "require('./package.json').version")
+          if npm view "@truealter/cli@${version}" version >/dev/null 2>&1; then
+            echo "@truealter/cli@${version} already published, ensuring principal dist-tag, skipping re-publish."
+            npm dist-tag add "@truealter/cli@${version}" principal
+          else
+            npm publish "$tarball" --access public --provenance --tag principal
+          fi
