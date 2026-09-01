@@ -157,9 +157,13 @@ jobs:
           )
 
           for marker in "${MARKERS[@]}"; do
-            # dist/lib/cosmetics/snippets.js carries "~blake" as a
-            # documentation comment example only
-            # (ws1-founder-exclusion-spec.md section 2.3). -F, because an
+            # One cosmetics module under dist/lib carries the first marker
+            # above as a documentation comment example only
+            # (ws1-founder-exclusion-spec.md section 2.3). The handle is not
+            # repeated here: it is a live element of MARKERS and the
+            # comment-leak scanner blocks a second, explanatory copy of it in
+            # prose, correctly, since prose is where a marker turns into an
+            # explanation of what is being withheld. -F, because an
             # unescaped dot in a filename pattern is a wildcard and would
             # also excuse the underscored spelling.
             hits=$(grep -rl "$marker" "$tmpdir/package/dist/" 2>/dev/null \
