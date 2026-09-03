@@ -221,16 +221,56 @@ jobs:
         # not been observed from this repo, and inventing a parse for it would
         # be a guess in the one step that must not guess. A duplicate stage
         # fails with the registry's own message, which is legible.
+        #
+        # THE EXCHANGE ASSERTION IS NOT DEBUG RESIDUE. npm attempts the OIDC
+        # exchange unconditionally and is written never to throw: every way it
+        # can fail returns undefined behind a `log.verbose` line a default run
+        # never prints. setup-node writes an .npmrc reading
+        # //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN} and, with no
+        # secret to fill it, sets that variable to the literal placeholder
+        # XXXXX-XXXXX-XXXXX-XXXXX, so a refused exchange does not stop the
+        # step. It falls through to an unauthenticated PUT and the registry
+        # answers `404 Not Found - PUT` on a package that is plainly there.
+        # That second failure, which describes the retry rather than the
+        # fault, cost three sessions across two days on @truealter/sdk. So the
+        # log is captured, replayed in full, and searched for the exchange's
+        # own refusal, which is reported as the error whatever status npm
+        # returned. Every other failure keeps npm's own status and message.
+        #
+        # TWO REFUSAL SHAPES, BOTH OBSERVED ON THIS ESTATE, because one
+        # pattern would have missed the other. @truealter/sdk printed
+        # `Failed token exchange request ... package not found` and fell
+        # through silently. @truealter/mcp-ollama was refused with
+        # `403 Forbidden - OIDC permission denied for this action`, which is
+        # loud but is a different string. Neither is invented here.
+        #
+        # `set -e` is DELIBERATELY ABSENT. With it the step dies on npm's own
+        # exit before the capture is read, so the assertion never runs and
+        # this whole block is decoration. Anchor: finding-the-sdk-oidc-
+        # exchange-404s-package-not-found-while-mcp-ollama-403s-permission-
+        # denied-so-the-two-refusals-are-different-and-the-staged-shape-
+        # answers-only-one-2026-09-03, which records this rung as owed.
         run: |
-          set -euo pipefail
+          set -uo pipefail
           tarball=$(ls truealter-cli-*.tgz)
           version=$(node -p "require('./package.json').version")
           if npm view "@truealter/cli@${version}" version >/dev/null 2>&1; then
             echo "@truealter/cli@${version} is already live on the registry, nothing to stage."
             exit 0
           fi
-          npm stage publish "$tarball" --access public --provenance --tag latest
-          echo "publish: staged ${version} with tag latest. It is NOT live until approved with 2FA."
+          status=0
+          npm stage publish "$tarball" --access public --provenance --tag latest \
+            --loglevel verbose > stage.log 2>&1 || status=$?
+          cat stage.log
+          if grep -qE 'Failed token exchange request|OIDC permission denied' stage.log; then
+            line=$(grep -m1 -E 'Failed token exchange request|OIDC permission denied' stage.log)
+            echo "::error::publish: the registry REFUSED the OIDC exchange, so any status below describes npm's unauthenticated retry rather than the fault. ${line}"
+            exit 1
+          fi
+          if [ "$status" -eq 0 ]; then
+            echo "publish: staged ${version} with tag latest. It is NOT live until approved with 2FA."
+          fi
+          exit "$status"
 
       - name: Cut the release this repo has never carried
         # Measured 2026-09-01: true-alter/cli held ZERO tags and ZERO releases
