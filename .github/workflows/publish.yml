@@ -1,51 +1,34 @@
 name: Publish
 
-# The npm publish for @truealter/cli runs HERE, in this public repo, rather
-# than in alter-cli where the source is authored.
+# The npm publish for @truealter/cli runs HERE, in this public repository.
 #
 # THE REASON IS NOT TIDINESS, IT IS THAT PROVENANCE IS OTHERWISE IMPOSSIBLE.
-# npm rejects `--provenance` from a private repository with HTTP 422, which
-# alter-cli's own release.yml records against its `id-token: write` line:
-# "NOT used for npm --provenance (that needs a public repo, rejected with
-# HTTP 422 on a private repo)". Every @truealter/cli version published to
-# date therefore carries no attestation at all, while @truealter/sdk, which
-# publishes from a public repo, carries a real one. Moving the publish here
-# is the only way the CLI ever gets one.
+# npm rejects `--provenance` from a private repository with HTTP 422, so a
+# release cut anywhere but a public repository carries no attestation at all.
+# Publishing from here is the only way the CLI gets one.
 #
-# Authentication is npm trusted publishing over GitHub OIDC, so this repo
-# holds no secrets and needs none. Anchor:
-# ruling-each-npm-package-gets-its-own-granular-publish-token-never-one-
-# automation-token-across-the-estate-2026-09-01, which states of this repo
-# "no secrets and no environments, and it stays that way", and that moving
-# the CLI release here "is now a workflow change with no credential step in
-# it". Trusted publishing is configured per package against ONE repository
-# and ONE workflow path, so this file's path is part of that configuration
-# and renaming it breaks the publish.
+# Authentication is npm trusted publishing over GitHub OIDC, so this
+# repository holds no secrets and needs none, and it stays that way. Trusted
+# publishing is configured per package against ONE repository and ONE workflow
+# path, so this file's path is part of that configuration and renaming it
+# breaks the publish.
 #
-# MAIN, NOT export/main, AND THAT IS DELIBERATE. true-alter/sdk's publish
-# workflow checks out `export/main`, a squashed snapshot branch force-pushed
-# by the monorepo at each release. Do not copy that here: alter-cli's
-# cli-public-export.yml chose main-not-export/main on 2026-08-27 in its own
-# comment block, committing on top with no force-push so a visitor lands on
-# exactly what publishes. This repo has one branch and that is the design.
+# ONE BRANCH, AND THAT IS DELIBERATE. The release pipeline commits the
+# curated tree onto `main` with no force-push, so a visitor lands on exactly
+# what publishes. This repository has one branch and that is the design.
 #
-# THE TRIGGER IS A DISPATCH, not a push. alter-cli's cli-public-export.yml
-# pushes the curated tree here and then dispatches this workflow, so a failed
-# export cannot reach npm. A push trigger would also fire on the export's own
-# commit, which would publish before the export had finished checking itself.
+# THE TRIGGER IS A DISPATCH, not a push. The release job pushes the curated
+# tree here and then dispatches this workflow, so a failed release cannot
+# reach npm. A push trigger would also fire on that job's own commit, which
+# would publish before it had finished checking itself.
 #
 # BOTH DISPATCH KINDS ARE DECLARED, and the repository one is what the
-# export actually uses. The loom-promote App's installation carries `contents:write` and
-# `actions:none`. `gh workflow run` hits the workflow-dispatch endpoint,
-# which needs `actions:write`, and true-alter/sdk's own publish chain records
-# that exact call 403ing on every release from 2026-08-12. The repository
-# dispatch endpoint needs only `contents:write`, so it works under the grant
-# the App already has, and widening the App to `actions:write` would let it
-# start arbitrary workflows across every repo it is installed on to solve one
-# job starting one workflow. `workflow_dispatch` stays for hand runs by a
-# maintainer, whose own token does carry `actions:write`. Anchor:
-# lesson-a-lesson-rows-repaired-clause-outlived-the-repo-it-repaired-so-the-
-# cli-mirror-reads-as-having-a-publisher-it-has-never-had-2026-09-01.
+# release actually uses. A repository dispatch needs only `contents:write`,
+# where `gh workflow run` hits the workflow-dispatch endpoint and needs
+# `actions:write`. Granting that second permission would let one automation
+# start arbitrary workflows everywhere it is installed, to solve one job
+# starting one workflow. `workflow_dispatch` stays for hand runs by a
+# maintainer, whose own token does carry `actions:write`.
 #
 # NO `npm test` STEP, AND ITS ABSENCE IS THE DESIGN. This repo's own `test`
 # script needs tsconfig.test.json and tests/, and the curated export ships
@@ -121,14 +104,11 @@ jobs:
           rm -rf "$tmpdir"
 
       - name: Founder-surface publish gate (WS1)
-        # Carried over verbatim from alter-cli's release.yml publish job. It
-        # scans the 14 founder/principal markers that must never appear in the
-        # public @truealter/cli artefact, on the exact tarball npm will upload
-        # rather than on the source tree, so it catches anything the pack step
-        # introduces. Moving the publish without moving this gate is precisely
-        # the failure lesson-public-mirror-publish-step-copied-the-sdks-shape-
-        # and-dropped-alter-clis-channel-posture-2026-08-09 already recorded
-        # once. Marker list: ws1-founder-exclusion-spec.md section 3.5.
+        # Scans the 14 markers that must never appear in the published
+        # @truealter/cli artefact, on the exact tarball npm will upload rather
+        # than on the source tree, so it catches anything the pack step
+        # introduces. It runs where the publish runs, deliberately: a gate
+        # that stayed behind when the publish moved would protect nothing.
         run: |
           set -euo pipefail
           tarball=$(ls truealter-cli-*.tgz)
@@ -181,7 +161,7 @@ jobs:
 
           if [ "$FAIL" -ne 0 ]; then
             echo "::error::Publish blocked: founder/principal markers detected in public artefact."
-            echo "::error::Move all flagged code to src-internal/ before publishing."
+            echo "::error::Move all flagged code off the published surface before publishing."
             exit 1
           fi
 
@@ -237,19 +217,15 @@ jobs:
         # own refusal, which is reported as the error whatever status npm
         # returned. Every other failure keeps npm's own status and message.
         #
-        # TWO REFUSAL SHAPES, BOTH OBSERVED ON THIS ESTATE, because one
-        # pattern would have missed the other. @truealter/sdk printed
-        # `Failed token exchange request ... package not found` and fell
-        # through silently. @truealter/mcp-ollama was refused with
-        # `403 Forbidden - OIDC permission denied for this action`, which is
-        # loud but is a different string. Neither is invented here.
+        # TWO REFUSAL SHAPES, BOTH OBSERVED, because one pattern would have
+        # missed the other. One prints `Failed token exchange request ...
+        # package not found` and falls through silently. The other is refused
+        # with `403 Forbidden - OIDC permission denied for this action`, which
+        # is loud but is a different string. Neither is invented here.
         #
         # `set -e` is DELIBERATELY ABSENT. With it the step dies on npm's own
         # exit before the capture is read, so the assertion never runs and
-        # this whole block is decoration. Anchor: finding-the-sdk-oidc-
-        # exchange-404s-package-not-found-while-mcp-ollama-403s-permission-
-        # denied-so-the-two-refusals-are-different-and-the-staged-shape-
-        # answers-only-one-2026-09-03, which records this rung as owed.
+        # this whole block is decoration.
         run: |
           set -uo pipefail
           tarball=$(ls truealter-cli-*.tgz)
